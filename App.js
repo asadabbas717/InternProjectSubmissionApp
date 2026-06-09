@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { SafeAreaView, StatusBar } from "react-native";
+
+import RoleScreen from "./src/screens/RoleScreen";
+import InternScreen from "./src/screens/InternScreen";
+import AdminScreen from "./src/screens/AdminScreen";
+import { styles } from "./src/styles/styles";
 
 export default function App() {
+  const [role, setRole] = useState(null);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#f4f6fb" />
+
+      {role === null && <RoleScreen onSelectRole={setRole} />}
+
+      {role === "intern" && (
+        <InternScreen onBack={() => setRole(null)} />
+      )}
+
+      {role === "admin" && (
+        <AdminScreen onBack={() => setRole(null)} />
+      )}
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
