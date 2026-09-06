@@ -16,7 +16,8 @@ import {
 
 import { styles } from "../styles/styles";
 
-const ADMIN_PASSWORD = "1234";
+const demoAdminEnabled =
+  process.env.EXPO_PUBLIC_ENABLE_UNSAFE_DEMO_ADMIN === "true";
 
 function formatDate(timestamp) {
   if (!timestamp?.toDate) return "Processing...";
@@ -24,26 +25,15 @@ function formatDate(timestamp) {
 }
 
 export default function AdminScreen({ onBack }) {
-  const [unlocked, setUnlocked] = useState(false);
-  const [password, setPassword] = useState("");
   const [submissions, setSubmissions] = useState([]);
   const [comments, setComments] = useState({});
 
   useEffect(() => {
-    if (!unlocked) return;
+    if (!demoAdminEnabled) return undefined;
 
     const unsubscribe = listenSubmissions(setSubmissions);
     return unsubscribe;
-  }, [unlocked]);
-
-  const loginAdmin = () => {
-    if (password === ADMIN_PASSWORD) {
-      setUnlocked(true);
-      setPassword("");
-    } else {
-      Alert.alert("Access Denied", "Incorrect admin password.");
-    }
-  };
+  }, []);
 
   const saveFeedback = async (submissionId, status) => {
     try {
@@ -61,31 +51,24 @@ export default function AdminScreen({ onBack }) {
     }
   };
 
-  if (!unlocked) {
+  if (!demoAdminEnabled) {
     return (
       <View style={styles.centerContainer}>
         <TouchableOpacity style={styles.backButton} onPress={onBack}>
           <Text style={styles.backButtonText}>← Back</Text>
         </TouchableOpacity>
 
-        <Text style={styles.screenTitle}>Admin Login</Text>
+        <Text style={styles.screenTitle}>Admin Access Disabled</Text>
         <Text style={styles.subtitle}>
-          Enter admin password to review submissions.
+          The public repository intentionally does not contain a client-side admin
+          password. A real deployment should use authenticated server-side authorization
+          (for example Firebase Authentication plus protected backend/security rules).
         </Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Enter admin password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-
-        <TouchableOpacity style={styles.primaryButton} onPress={loginAdmin}>
-          <Text style={styles.buttonText}>Login as Admin</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.infoText}>Demo password: admin123</Text>
+        <Text style={styles.infoText}>
+          For local UI demonstration only, set
+          EXPO_PUBLIC_ENABLE_UNSAFE_DEMO_ADMIN=true. Do not use that flag as a security
+          boundary with real data.
+        </Text>
       </View>
     );
   }
@@ -96,9 +79,9 @@ export default function AdminScreen({ onBack }) {
         <Text style={styles.backButtonText}>← Back</Text>
       </TouchableOpacity>
 
-      <Text style={styles.screenTitle}>Admin Dashboard</Text>
+      <Text style={styles.screenTitle}>Admin Dashboard — Demo Mode</Text>
       <Text style={styles.subtitle}>
-        Review intern submissions and provide feedback.
+        Local demonstration mode only. Do not connect this mode to production data.
       </Text>
 
       {submissions.length === 0 && (
@@ -108,7 +91,6 @@ export default function AdminScreen({ onBack }) {
       {submissions.map((item) => (
         <View key={item.id} style={styles.card}>
           <Text style={styles.cardTitle}>{item.projectTitle}</Text>
-
           <Text style={styles.detailText}>Intern: {item.internName}</Text>
           <Text style={styles.detailText}>File: {item.fileName}</Text>
           <Text style={styles.detailText}>Status: {item.status}</Text>
@@ -144,14 +126,12 @@ export default function AdminScreen({ onBack }) {
             >
               <Text style={styles.statusButtonText}>Reviewed</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               style={styles.approveButton}
               onPress={() => saveFeedback(item.id, "Approved")}
             >
               <Text style={styles.statusButtonText}>Approved</Text>
             </TouchableOpacity>
-
             <TouchableOpacity
               style={styles.rejectButton}
               onPress={() => saveFeedback(item.id, "Rejected")}
