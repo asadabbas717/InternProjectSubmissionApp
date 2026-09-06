@@ -1,14 +1,21 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
+const required = (name) => {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+};
+
 const firebaseConfig = {
-  apiKey: "AIzaSyAFvFaYbWKLuK8qQnvzmKBhBvkJOtI0LfM",
-  authDomain: "intern-project-submission-app.firebaseapp.com",
-  projectId: "intern-project-submission-app",
-  storageBucket: "intern-project-submission-app.firebasestorage.app",
-  messagingSenderId: "922752032158",
-  appId: "1:922752032158:web:26f8155409673ba8880a8f",
-  measurementId: "G-4LPS81ME2Y"
+  apiKey: required("EXPO_PUBLIC_FIREBASE_API_KEY"),
+  authDomain: required("EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN"),
+  projectId: required("EXPO_PUBLIC_FIREBASE_PROJECT_ID"),
+  storageBucket: required("EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET"),
+  messagingSenderId: required("EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"),
+  appId: required("EXPO_PUBLIC_FIREBASE_APP_ID"),
 };
 
 const app = initializeApp(firebaseConfig);
