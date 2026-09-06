@@ -1,83 +1,44 @@
 # Intern Project Submission App
 
-A React Native mobile application that allows interns to submit their project files and receive feedback from the admin. The app provides separate dashboards for Intern and Admin roles to keep the submission and review process simple and organized.
+A React Native mobile application for internship project submission and review workflows.
 
 ## Features
 
-* Role selection: Intern or Admin
-* Intern project submission
-* PDF/ZIP file selection using Document Picker
-* File upload using Supabase Storage
-* Submission records stored in Firebase Firestore
-* Admin review system
-* Admin feedback/comments
-* Submission status update: Pending, Reviewed, Approved, or Rejected
-* Submission history for interns
+- Intern project submission
+- PDF/ZIP file selection
+- Supabase Storage uploads
+- Firebase Firestore submission records
+- Submission history and feedback
+- Demo admin review UI
 
-## Technologies Used
+## Technologies
 
-* React Native
-* Expo
-* Firebase Firestore
-* Supabase Storage
-* JavaScript
-* Document Picker
+- React Native
+- Expo
+- Firebase Firestore
+- Supabase Storage
+- JavaScript
+- Document Picker
 
-## App Flow
-
-### Intern
-
-1. Select **Continue as Intern**
-2. Enter intern name
-3. Enter project title
-4. Select PDF or ZIP file
-5. Submit project
-6. View submission history and admin feedback
-
-### Admin
-
-1. Select **Continue as Admin**
-2. Enter admin password
-3. View all submitted projects
-4. Open submitted files
-5. Add feedback
-6. Update submission status
-
-## Installation
+## Local setup
 
 ```bash
 npm install
-```
-
-## Run the App
-
-```bash
+cp .env.example .env
 npx expo start
 ```
 
-Scan the QR code using Expo Go on your mobile device.
+Fill `.env` with your own Firebase and Supabase client configuration. The real `.env` file is ignored by Git and must not be committed.
 
-## Configuration
+## Security note
 
-Create and configure Firebase Firestore for storing submission data.
+The repository intentionally contains no live project credentials and no hard-coded admin password.
 
-Create a Supabase project and storage bucket for uploading PDF/ZIP files.
+Firebase client configuration and Supabase publishable/anon keys are client-side identifiers rather than server secrets, but they should still be kept out of a public portfolio repository when they point to a live project. Access to actual data must be enforced by Firebase Security Rules, Supabase Row Level Security/storage policies, authenticated roles, quotas, and provider-side restrictions.
 
-Update the Firebase and Supabase configuration files with your own project keys.
+The admin screen is disabled by default. `EXPO_PUBLIC_ENABLE_UNSAFE_DEMO_ADMIN=true` exists only for local UI demonstration and **must not** be treated as authentication or authorization. A real deployment should use authenticated server-side/managed authorization such as Firebase Authentication with protected security rules or an equivalent backend design.
 
-## Admin Password
-
-Default demo admin password:
-
-```txt
-admin123
-```
-
-You can change it inside the Admin screen file.
-
-## Note
-
-Firebase Storage requires billing activation, so Supabase Storage was used as a free alternative for file uploads while Firebase Firestore was used for storing submission records and feedback.
+Never commit service-account JSON, Supabase service-role keys, private API keys, signing keys, `.env` files, databases, logs, backups, or customer/user data.
 
 ## Author
 
