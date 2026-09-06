@@ -1,6 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
-const SUPABASE_URL = "https://rqzlvehrakbrqapsjngq.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_c6Xz1Yr73zFQ__Y7jLV44w_vMwNQALs";
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
+const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+if (!supabaseUrl || !supabaseAnonKey) {
+  throw new Error(
+    "Missing EXPO_PUBLIC_SUPABASE_URL or EXPO_PUBLIC_SUPABASE_ANON_KEY. Configure them in a local .env file."
+  );
+}
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
