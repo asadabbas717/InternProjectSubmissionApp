@@ -2,6 +2,8 @@
 
 A React Native mobile application for internship project submission and review workflows.
 
+**Internship prototype:** the admin review screen is an unsafe, disabled-by-default UI demo, not an authenticated admin service. Provider-side access controls must be configured before using real data.
+
 ## Features
 
 - Intern project submission
@@ -32,7 +34,7 @@ Fill `.env` with your own Firebase and Supabase client configuration. The real `
 
 ## Security note
 
-The repository intentionally contains no live project credentials and no hard-coded admin password.
+Use your own development configuration. This presentation review does not establish that repository history is free of credentials.
 
 Firebase client configuration and Supabase publishable/anon keys are client-side identifiers rather than server secrets, but they should still be kept out of a public portfolio repository when they point to a live project. Access to actual data must be enforced by Firebase Security Rules, Supabase Row Level Security/storage policies, authenticated roles, quotas, and provider-side restrictions.
 
